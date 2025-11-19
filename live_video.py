@@ -12,8 +12,6 @@ Person_2_image = face_recognition.load_image_file("Person_2.png")
 Person_2_face_encoding = face_recognition.face_encodings(Person_2_image)[0]
 
 
-
-
 # Create arrays of known face encodings and their names
 known_face_encodings = [
     Person_1_face_encoding,
