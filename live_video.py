@@ -1,25 +1,38 @@
 import face_recognition
 import cv2
 import numpy as np
+import os
 
 video_capture = cv2.VideoCapture(0)
 
 # Load a sample picture and learn how to recognize it.
-Person_1_image = face_recognition.load_image_file("Person_1.jpg")
-Person_1_face_encoding = face_recognition.face_encodings(Person_1_image)[0]
 
-Person_2_image = face_recognition.load_image_file("Person_2.png")
-Person_2_face_encoding = face_recognition.face_encodings(Person_2_image)[0]
+def faceEncoder(image_target = "", directory = "TargetImages"):
+    root, extension = os.path.splitext(image_target)
+    Person_image = face_recognition.load_image_file(f"{directory}/{image_target}")
+
+    Person_numpy_data = f'TargetEncodings/{root}.npy'
+    if not os.path.isfile(Person_numpy_data):
+        print(f"Numpy file for {root} does not exist, encoding information")
+        Person_face_encoding = face_recognition.face_encodings(Person_image)[0]
+        np.save(Person_numpy_data, Person_face_encoding)
+    else:
+        print(f"Numpy file for {root} exists, loading data")
+        Person_face_encoding = Person_numpy_data
+    
+    return Person_face_encoding
 
 
+TARGET_PERSON = "Person_1.png"
+
+
+Person_1_face_encoding = faceEncoder(TARGET_PERSON)
 # Create arrays of known face encodings and their names
 known_face_encodings = [
-    Person_1_face_encoding,
-    Person_2_face_encoding
+    Person_1_face_encoding
 ]
 known_face_names = [
-    "Person 1",
-    "Person 2"
+    "Person 1"
 ]
 
 # Initialize some variables
