@@ -2,60 +2,38 @@ import face_recognition
 import cv2
 import numpy as np
 import os
+from folder_setup import makeDirs
+from encoder import faceEncoder, encodeDatabase
 
-#video_capture = cv2.VideoCapture(0)
+def main(TARGET_PERSON = "Person_1.png"):
+    makeDirs()
+    Person_1_face_encoding = faceEncoder(TARGET_PERSON)
 
-# Load a sample picture and learn how to recognize it.
+    known_face_encodings = [
+        Person_1_face_encoding
+    ]
+    known_face_names = [
+        "Person 1"
+    ]
+    face_locations = []
+    face_encodings = []
+    face_names = []
+
+    IDENTIFIER = "_face"
+    results = encodeDatabase("Database", identifier=IDENTIFIER)
+
+    for name, encoding in results.items():
+        #print(f"{name}: encoding length = {len(encoding)}")
+        face_encoding = encoding["encoding"]
+        recognition = face_recognition.compare_faces([Person_1_face_encoding], face_encoding)
+        if recognition[0] == True:
+            file_name = encoding["filename"]
+            print(f"Facial Recognition Match in file name: '{file_name}'")
+        
 
 
-
-def faceEncoder(image_target = "", directory = "TargetImages"):
-    root, extension = os.path.splitext(image_target)
-    Person_image = face_recognition.load_image_file(f"{directory}/{image_target}")
-
-    Person_numpy_data = f'TargetEncodings/{root}.npy'
-    if not os.path.isfile(Person_numpy_data):
-        print(f"Numpy file for {root} does not exist, encoding information")
-        Person_face_encoding = face_recognition.face_encodings(Person_image)[0]
-        np.save(Person_numpy_data, Person_face_encoding)
-    else:
-        print(f"Numpy file for {root} exists, loading data")
-        Person_face_encoding = np.load(Person_numpy_data)
     
-    return Person_face_encoding
-
-
-TARGET_PERSON = "i.png"
-
-
-Person_1_face_encoding = faceEncoder(TARGET_PERSON)
-# Create arrays of known face encodings and their names
-known_face_encodings = [
-    Person_1_face_encoding
-]
-known_face_names = [
-    "Person 1"
-]
-
-# Initialize some variables
-face_locations = []
-face_encodings = []
-face_names = []
-#process_this_frame = True
-
-def encoding_all_faces(image_path = "unknown.png"):
-    image = face_recognition.load_image_file(image_path)
-    encoding = face_recognition.face_encodings(image)
-
-    print(f"Found {len(encoding)} faces")
-    return encoding
-
-
-results = encoding_all_faces("group.jpg")
-for i, face_encoding in enumerate(results):
-    print(f"Face {i} encoding length: {len(face_encoding)}")
-
-
+main()
 
 
 
