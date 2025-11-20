@@ -5,6 +5,7 @@ import os
 from folder_setup import makeDirs
 from encoder import faceEncoder, encodeDatabase
 from decoder import compareFaces_match, compareFaces_distance
+import pandas as pd
 
 
 
@@ -14,13 +15,31 @@ def main(TARGET_PERSON = "Person_1.png"):
     UNIQUE_FACE_IDENTIFIER = "_face"
     results = encodeDatabase("Database", unique_face_identifier=UNIQUE_FACE_IDENTIFIER)
     DISTANCE_THRESHOLD = 0.6
+    file_list_match = []
+    all_matches = []
+    file_list_distance = []
+    all_distances = []
 
     for name, encoding in results.items():
-        compareFaces_match([Person_1_face_encoding], face_encoding= encoding)
-        compareFaces_distance([Person_1_face_encoding], face_encoding= encoding, threshold = DISTANCE_THRESHOLD)
+        file_list_match = compareFaces_match([Person_1_face_encoding], face_encoding= encoding)
+        file_list_distance = compareFaces_distance([Person_1_face_encoding], face_encoding= encoding, threshold = DISTANCE_THRESHOLD)
+
+        all_matches.extend(file_list_match)
+        all_distances.extend(file_list_distance)
+
+    df = pd.DataFrame({
+        "match_filenames": all_matches,
+        "distance_filenames": [d["filename"] for d in all_distances],
+        "distance": [d["distance"] for d in all_distances]
+    })
 
 
-    
+    df.to_csv("face_results.csv", index=False)
+
+    print("Saved results to face_results.csv")
+
+
+
 main()
 
 
