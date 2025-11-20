@@ -4,32 +4,20 @@ import numpy as np
 import os
 from folder_setup import makeDirs
 from encoder import faceEncoder, encodeDatabase
+from decoder import compareFaces_match, compareFaces_distance
+
+
 
 def main(TARGET_PERSON = "Person_1.png"):
     makeDirs()
     Person_1_face_encoding = faceEncoder(TARGET_PERSON)
-
-    known_face_encodings = [
-        Person_1_face_encoding
-    ]
-    known_face_names = [
-        "Person 1"
-    ]
-    face_locations = []
-    face_encodings = []
-    face_names = []
-
-    IDENTIFIER = "_face"
-    results = encodeDatabase("Database", identifier=IDENTIFIER)
+    UNIQUE_FACE_IDENTIFIER = "_face"
+    results = encodeDatabase("Database", unique_face_identifier=UNIQUE_FACE_IDENTIFIER)
+    DISTANCE_THRESHOLD = 0.6
 
     for name, encoding in results.items():
-        #print(f"{name}: encoding length = {len(encoding)}")
-        face_encoding = encoding["encoding"]
-        recognition = face_recognition.compare_faces([Person_1_face_encoding], face_encoding)
-        if recognition[0] == True:
-            file_name = encoding["filename"]
-            print(f"Facial Recognition Match in file name: '{file_name}'")
-        
+        compareFaces_match([Person_1_face_encoding], face_encoding= encoding)
+        compareFaces_distance([Person_1_face_encoding], face_encoding= encoding, threshold = DISTANCE_THRESHOLD)
 
 
     

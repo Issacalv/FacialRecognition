@@ -17,7 +17,7 @@ def faceEncoder(image_target = "", directory = "TargetImages"):
     
     return Person_face_encoding
 
-def encodeDatabase(directory="Database", identifier= "_face", save_dir="DatabaseEncodings"):
+def encodeDatabase(directory="Database", unique_face_identifier= "_face", save_dir="DatabaseEncodings"):
     os.makedirs(save_dir, exist_ok=True)
 
     all_encodings = {}
@@ -44,7 +44,7 @@ def encodeDatabase(directory="Database", identifier= "_face", save_dir="Database
 
         # Process each face encoding
         for i, enc in enumerate(database_face_encodings):
-            npy_path = os.path.join(save_dir, f"{base_name}{identifier}{i}.npy")
+            npy_path = os.path.join(save_dir, f"{base_name}{unique_face_identifier}{i}.npy")
 
             if not os.path.isfile(npy_path):
                 print(f"    Saving new encoding -> {npy_path}")
@@ -53,7 +53,7 @@ def encodeDatabase(directory="Database", identifier= "_face", save_dir="Database
                 print(f"    Loading cached encoding -> {npy_path}")
                 enc = np.load(npy_path)
 
-            key = f"{base_name}{identifier}{i}"
+            key = f"{base_name}{unique_face_identifier}{i}"
             all_encodings[key] = {
                 "encoding": enc,
                 "filename": full_filename,     # e.g. "group.jpg"
