@@ -8,12 +8,11 @@ from decoder import compareFaces_match, compareFaces_distance
 import pandas as pd
 
 
-
 def main(TARGET_PERSON = "Person_1.png"):
     makeDirs()
     Person_1_face_encoding = faceEncoder(TARGET_PERSON)
     UNIQUE_FACE_IDENTIFIER = "_face"
-    results = encodeDatabase("Database", unique_face_identifier=UNIQUE_FACE_IDENTIFIER)
+    results = encodeDatabase("Dataset", unique_face_identifier=UNIQUE_FACE_IDENTIFIER)
     DISTANCE_THRESHOLD = 0.6
     file_list_match = []
     all_matches = []
@@ -40,8 +39,7 @@ def main(TARGET_PERSON = "Person_1.png"):
 
 
 
-main()
-
+main("Person1.jpg")
 
 
 

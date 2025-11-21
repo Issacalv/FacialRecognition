@@ -17,7 +17,7 @@ def compareFaces_distance(Target_Encoding = None, face_encoding = None, threshol
         if face_distance < threshold:
             filename = face_encoding["filename"]
             print(f"Person match found in {filename}")
-            print("The test image has a distance of {:.2} from known image #{}".format(face_distance, i))
+            print("The test image has a distance of {:.2} from known image".format(face_distance, i))
             file_list.append({
                 "filename": filename,
                 "distance": float(face_distance)
