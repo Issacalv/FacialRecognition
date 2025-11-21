@@ -2,7 +2,7 @@ import face_recognition
 import cv2
 import numpy as np
 import os
-from folder_setup import makeDirs
+from folder_setup import makeDirs, DATABASE_DIR
 from encoder import faceEncoder, encodeDatabase
 from decoder import compareFaces_match, compareFaces_distance
 import pandas as pd
@@ -12,7 +12,7 @@ def main(TARGET_PERSON = "Person_1.png"):
     makeDirs()
     Person_1_face_encoding = faceEncoder(TARGET_PERSON)
     UNIQUE_FACE_IDENTIFIER = "_face"
-    results = encodeDatabase("Dataset", unique_face_identifier=UNIQUE_FACE_IDENTIFIER)
+    results = encodeDatabase(DATABASE_DIR, unique_face_identifier=UNIQUE_FACE_IDENTIFIER)
     DISTANCE_THRESHOLD = 0.6
     file_list_match = []
     all_matches = []
@@ -26,6 +26,7 @@ def main(TARGET_PERSON = "Person_1.png"):
         all_matches.extend(file_list_match)
         all_distances.extend(file_list_distance)
 
+
     df = pd.DataFrame({
         "match_filenames": all_matches,
         "distance_filenames": [d["filename"] for d in all_distances],
@@ -33,7 +34,7 @@ def main(TARGET_PERSON = "Person_1.png"):
     })
 
 
-    df.to_csv("face_results.csv", index=False)
+    df.to_csv(f"{TARGET_PERSON}.csv", index=False)
 
     print("Saved results to face_results.csv")
 

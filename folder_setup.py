@@ -2,7 +2,7 @@ import os
 
 TARGET_IMAGES_DIR = "TargetImages"
 TARGET_ENCODINGS_DIR = "TargetEncodings"
-DATABASE_DIR = "Database"
+DATABASE_DIR = "Dataset"
 
 def makeDirs():
     os.makedirs(TARGET_ENCODINGS_DIR, exist_ok=True)
