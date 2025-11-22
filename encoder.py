@@ -8,11 +8,11 @@ def faceEncoder(image_target = "", directory = "TargetImages"):
 
     Person_numpy_data = f'TargetEncodings/{root}.npy'
     if not os.path.isfile(Person_numpy_data):
-        print(f"Numpy file for {root} does not exist, encoding information")
+        #print(f"Numpy file for {root} does not exist, encoding information")
         Person_face_encoding = face_recognition.face_encodings(Person_image)[0]
         np.save(Person_numpy_data, Person_face_encoding)
     else:
-        print(f"Numpy file for {root} exists, loading data")
+        #print(f"Numpy file for {root} exists, loading data")
         Person_face_encoding = np.load(Person_numpy_data)
     
     return Person_face_encoding
@@ -29,7 +29,7 @@ def encodeDatabase(directory="Dataset", unique_face_identifier="_face", save_dir
         base_name, ext = os.path.splitext(file)
         image_path = os.path.join(directory, file)
 
-        print(f"\nProcessing: {image_path}")
+        #print(f"\nProcessing: {image_path}")
 
         cached_files = [
             f for f in os.listdir(save_dir)
@@ -37,7 +37,7 @@ def encodeDatabase(directory="Dataset", unique_face_identifier="_face", save_dir
         ]
 
         if cached_files:
-            print("Cached encodings found")
+            #print("Cached encodings found")
 
             for idx, npy_file in enumerate(sorted(cached_files)):
                 npy_path = os.path.join(save_dir, npy_file)
@@ -56,11 +56,11 @@ def encodeDatabase(directory="Dataset", unique_face_identifier="_face", save_dir
         image = face_recognition.load_image_file(image_path)
         database_face_encodings = face_recognition.face_encodings(image)
 
-        print(f" Found {len(database_face_encodings)} faces in {file}")
+        #print(f" Found {len(database_face_encodings)} faces in {file}")
 
         for i, enc in enumerate(database_face_encodings):
             npy_path = os.path.join(save_dir, f"{base_name}{unique_face_identifier}{i}.npy")
-            print(f"    Saving encoding -> {npy_path}")
+            #print(f"    Saving encoding -> {npy_path}")
             np.save(npy_path, enc)
 
             key = f"{base_name}{unique_face_identifier}{i}"
